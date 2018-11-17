@@ -11,15 +11,13 @@ class App extends Component {
     ]
   }
 
-  switchNameHandler = (newName) => {
-    // console.log('Was clicked');
-    this.setState( {
-      persons: [
-        {name: newName, age: 23},
-        {name: 'Maria', age: 23},
-        {name: 'Jake', age: 24}
-      ]
-    } )
+  deletePersonHandler = (personIndex) => {
+    const persons = [...this.state.persons];
+    // above, we're copying the array rather than just references
+    // const persons = this.state.persons.slice();
+    // .slice() without an argument copies the array, which we want since arrays are reference type and we shouldn't mutate state data on the following line
+    persons.splice(personIndex, 1);
+    this.setState({persons: persons});
   }
 
   nameChangedHandler = (event) => {
@@ -52,8 +50,9 @@ class App extends Component {
     if (this.state.showPersons) {
       persons = (
         <div>
-          {this.state.persons.map(person => {
+          {this.state.persons.map((person, index) => {
             return <Person 
+              click={() => this.deletePersonHandler(index)}
               name={person.name}
               age={person.age} />
           })}
